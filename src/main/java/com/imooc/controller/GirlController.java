@@ -1,8 +1,10 @@
 package com.imooc.controller;
 
 import com.imooc.entity.Girl;
+import com.imooc.entity.Result;
 import com.imooc.repository.GirlRepository;
 import com.imooc.service.GirlService;
+import com.imooc.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,16 +35,17 @@ public class GirlController {
      * @return
      */
     @PostMapping(value = "/addgirl")
-    public Girl addGirl(@Valid Girl girl, BindingResult bindingResult) {
+    public Result<Girl> addGirl(@Valid Girl girl, BindingResult bindingResult) {
+        Result result = new Result();
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getFieldError().getDefaultMessage());
-            return null;
+            return ResultUtil.error(-1001, bindingResult.getFieldError().getDefaultMessage());
         } else {
             girl.setCupSize(girl.getCupSize());
             girl.setAge(girl.getAge());
-        }
 
-        return girlRepository.save(girl);
+            result = ResultUtil.success(girlRepository.save(girl));
+            return result;
+        }
     }
 
     //查询一个女生
