@@ -1,23 +1,20 @@
 package com.imooc.controller;
 
-import com.imooc.domain.Girl;
+import com.imooc.entity.Girl;
 import com.imooc.repository.GirlRepository;
 import com.imooc.service.GirlService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
-/**
- * Created by 廖师兄
- * 2016-11-03 23:15
- */
 @RestController
+@RequestMapping("/api")
 public class GirlController {
-
     @Autowired
     private GirlRepository girlRepository;
-
     @Autowired
     private GirlService girlService;
 
@@ -25,38 +22,38 @@ public class GirlController {
      * 查询所有女生列表
      * @return
      */
-    @GetMapping(value = "/girls")
-    public List<Girl> girlList() {
+    @GetMapping(value = "/getgirllist")
+    public List<Girl> getGirlList() {
         return girlRepository.findAll();
     }
 
     /**
      * 添加一个女生
-     * @param cupSize
-     * @param age
+     * @param girl
      * @return
      */
-    @PostMapping(value = "/girls")
-    public Girl girlAdd(@RequestParam("cupSize") String cupSize,
-                          @RequestParam("age") Integer age) {
-        Girl girl = new Girl();
-        girl.setCupSize(cupSize);
-        girl.setAge(age);
+    @PostMapping(value = "/addgirl")
+    public Girl addGirl(@Valid Girl girl, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getFieldError().getDefaultMessage());
+            return null;
+        } else {
+            girl.setCupSize(girl.getCupSize());
+            girl.setAge(girl.getAge());
+        }
 
         return girlRepository.save(girl);
     }
 
     //查询一个女生
-    @GetMapping(value = "/girls/{id}")
-    public Girl girlFindOne(@PathVariable("id") Integer id) {
-        return girlRepository.findOne(id);
+    @GetMapping(value = "/getgirl")
+    public Girl getGirl(@RequestParam("id") Integer id) {
+        return girlRepository.findById(id).orElse(null);
     }
 
     //更新
-    @PutMapping(value = "/girls/{id}")
-    public Girl girlUpdate(@PathVariable("id") Integer id,
-                           @RequestParam("cupSize") String cupSize,
-                           @RequestParam("age") Integer age) {
+    @PutMapping(value = "/updategirl")
+    public Girl updateGirl(@RequestParam("id") Integer id, @RequestParam("cupSize") String cupSize, @RequestParam("age") Integer age) {
         Girl girl = new Girl();
         girl.setId(id);
         girl.setCupSize(cupSize);
@@ -66,14 +63,15 @@ public class GirlController {
     }
 
     //删除
-    @DeleteMapping(value = "/girls/{id}")
-    public void girlDelete(@PathVariable("id") Integer id) {
-        girlRepository.delete(id);
+    @DeleteMapping(value = "/deletegirl")
+    public void deleteGirl(@RequestParam("id") Integer id) {
+        Girl girl = girlRepository.findById(id).orElse(null);
+        girlRepository.delete(girl);
     }
 
     //通过年龄查询女生列表
-    @GetMapping(value = "/girls/age/{age}")
-    public List<Girl> girlListByAge(@PathVariable("age") Integer age) {
+    @GetMapping(value = "/getgirllistbyage")
+    public List<Girl> getGirlListByAge(@RequestParam("age") Integer age) {
         return girlRepository.findByAge(age);
     }
 

@@ -1,13 +1,10 @@
-package com.imooc.domain;
+package com.imooc.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 
-/**
- * Created by 廖师兄
- * 2016-11-03 23:07
- */
 @Entity
 public class Girl {
 
@@ -17,10 +14,13 @@ public class Girl {
 
     private String cupSize;
 
+    @Min(value = 18, message = "未成年少女禁止入内")
     private Integer age;
 
     public Girl() {
     }
+
+    // Getter & Setter
 
     public Integer getId() {
         return id;
@@ -44,5 +44,16 @@ public class Girl {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    // toString
+
+    @Override
+    public String toString() {
+        return "Girl{" +
+                "id=" + id +
+                ", cupSize='" + cupSize + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

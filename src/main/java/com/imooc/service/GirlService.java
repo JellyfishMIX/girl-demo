@@ -1,21 +1,20 @@
 package com.imooc.service;
 
-import com.imooc.domain.Girl;
+import com.imooc.entity.Girl;
 import com.imooc.repository.GirlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Created by 廖师兄
- * 2016-11-04 00:08
- */
 @Service
 public class GirlService {
 
     @Autowired
     private GirlRepository girlRepository;
 
+    /**
+     * 测试，插入两个新girl
+     */
     @Transactional
     public void insertTwo() {
         Girl girlA = new Girl();
