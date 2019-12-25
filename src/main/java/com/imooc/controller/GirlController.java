@@ -82,4 +82,19 @@ public class GirlController {
     public void girlTwo() {
         girlService.insertTwo();
     }
+
+    /**
+     * 通过id获取年龄
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @GetMapping(value = "/getagebyid")
+    public Result getAge(@RequestParam("id") Integer id) throws Exception {
+        Girl girl = new Girl();
+        Integer age = girlService.getAge(id);
+        girl.setAge(age);
+        Result<Girl> result = ResultUtil.success(girl);
+        return result;
+    }
 }
