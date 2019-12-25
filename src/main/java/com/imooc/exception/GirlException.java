@@ -1,13 +1,14 @@
 package com.imooc.exception;
 
 import com.imooc.entity.Girl;
+import com.imooc.enums.ResultEnum;
 
 public class GirlException extends RuntimeException {
     private Integer stateCode;
 
-    public GirlException(Integer stateCode, String stateInfo) {
-        super(stateInfo);
-        this.stateCode = stateCode;
+    public GirlException(ResultEnum resultEnum) {
+        super(resultEnum.getStateInfo());
+        this.stateCode = resultEnum.getStateCode();
     }
 
     // Getter & Setter
